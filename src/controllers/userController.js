@@ -34,6 +34,11 @@ class UserController {
     this.database.splice(indexOfUser, 1);
     fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
   }
+
+  deleteAllUsers() {
+    this.database = [];
+    fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
+  }
 }
 
 module.exports = UserController;

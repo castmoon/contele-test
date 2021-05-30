@@ -36,5 +36,10 @@ routes.delete('/:id', (req, res) => {
   res.status(200).json({message: "success"});
 });
 
+routes.delete('/', (req, res) => {
+  usersController.deleteAllUsers();
+  res.status(200).json({message: "all users deleted"});
+});
+
 
 module.exports = routes;
