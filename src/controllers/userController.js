@@ -1,5 +1,7 @@
 const User = require("../models/User");
 const fs = require('fs');
+const { InvalidParamError, NotFoundError } = require('../protocols/errors');
+const badRequest = require('../protocols/http/http-helper');
 
 class UserController {
   constructor(database) {
@@ -7,7 +9,13 @@ class UserController {
   }
 
   listAllUsers() {
-    return this.database;
+    if(this.database.length === 0) {
+      return badRequest(new NotFoundError('users'));
+    }
+    return {
+      statusCode: 200,
+      body: this.database
+    };
   }
 
     listUserById(id) {

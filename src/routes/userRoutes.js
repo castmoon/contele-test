@@ -10,7 +10,7 @@ const usersController = new UsersController(readDatabase());
 
 routes.get('/', (req, res) => {
   const users = usersController.listAllUsers();
-  return res.status(200).json(users);
+  return res.status(users.statusCode).json(users.body);
 });
 
 routes.get('/:id', (req, res) => {
