@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const fs = require('fs');
-const { InvalidParamError, NotFoundError } = require('../protocols/errors');
+const { InvalidParamError, NotFoundError, MissingParamError } = require('../protocols/errors');
 const badRequest = require('../protocols/http/http-helper');
 
 class UserController {
@@ -20,15 +20,32 @@ class UserController {
 
     listUserById(id) {
     const filteredUser = this.database.find(user => user.id === id);
-    return filteredUser;
+    if(!filteredUser) {
+      return badRequest(new NotFoundError('user'));
+    }
+    return {
+      statusCode: 200,
+      body: filteredUser
+    };
   }
 
   createUser({ email, password }) {
+    if(!email) {
+      return badRequest(new MissingParamError('email'));
+    }
+    if(!password) {
+      return badRequest(new MissingParamError('password'));
+    }
     const generatedId = Math.random().toString(32).substr(2,9)
     let user = new User(generatedId, email, password);
     this.database.push(user);
     fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
-    return user;
+    return {
+      statusCode: 200,
+      body: {
+        message: "user successfully created"
+      }
+    };
   }
 
   updateUser(id, {password}) {
