@@ -3,7 +3,7 @@ const routes = Router();
 const fs = require('fs');
 const UsersController = require('../controllers/userController');
 
-const usersDB = JSON.parse(fs.readFileSync(`${__dirname}/../database.json`));
+const usersDB = JSON.parse(fs.readFileSync(`${__dirname}/../database.json`), 'utf-8');
 const usersController = new UsersController(usersDB);
 
 routes.get('/', (req, res) => {
@@ -17,8 +17,9 @@ routes.get('/:id', (req, res) => {
   return res.status(200).json(user);
 });
 
-routes.post('', async (req, res) => {
-  const { email, password } = req.body;
+routes.post('', (req, res) => {
+  const createdUser = usersController.createUser({email, password} = req.body);
+  return res.status(200).json(createdUser);
 })
 
 
