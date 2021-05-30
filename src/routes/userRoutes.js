@@ -30,5 +30,11 @@ routes.put('/:id', (req, res) => {
   return res.status(200).json(updatedUser);
 });
 
+routes.delete('/:id', (req, res) => {
+  const id = req.params.id;
+  usersController.deleteUser(id);
+  res.status(200).json({message: "success"});
+});
+
 
 module.exports = routes;
