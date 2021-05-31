@@ -1,5 +1,5 @@
 const { CreateUserController } = require('../../controllers');
-const { NotFoundError, MissingParamError } = require('../../protocols/errors');
+const { NotFoundError, MissingParamError, InvalidParamError } = require('../../protocols/errors');
 
 
 describe('CreateUsersController', () => {
@@ -20,4 +20,12 @@ describe('CreateUsersController', () => {
         expect(createUserSpy.body).toEqual(new MissingParamError('password'));
         expect(createUserSpy.statusCode).toBe(400);
     });
+
+    test('should throws if an invalid email is provided', () => {
+        const createUserController = makeCreateUserController();
+        const createUserSpy = createUserController.handle('test', 'test_password');
+        expect(createUserSpy.body).toEqual(new InvalidParamError('email'));
+        expect(createUserSpy.statusCode).toBe(400);
+    });
+    
 });
