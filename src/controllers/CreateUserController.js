@@ -29,7 +29,6 @@ class CreateUserController {
 
         const searchEmailInDB = this.database.find(user => user.email === email);
 
-        console.log(searchEmailInDB);
 
         if(searchEmailInDB) {
           return badRequest(new InvalidParamError('email', 'Email already used'))
@@ -38,7 +37,6 @@ class CreateUserController {
         const generatedId = idGenerator()
     
         let user = new User(generatedId, email, password);
-        console.log(user);
         this.database.push(user);
         console.log(this.database);
         fs.writeFileSync(`${__dirname}/../database/database.json`, JSON.stringify(this.database), 'utf-8');

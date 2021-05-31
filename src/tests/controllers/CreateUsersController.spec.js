@@ -35,4 +35,15 @@ describe('CreateUsersController', () => {
         expect(createUserSpy.statusCode).toBe(400);
     });
 
+    test('should throws if already email exists', () => {
+        const createUserController = new CreateUserController([{
+            "id": "test_id",
+            "email": "test@test.com",
+            "password": "password"
+        }])
+        const createUserSpy = createUserController.handle('test@test.com', 'testPassword1@');
+        expect(createUserSpy.body).toEqual(new InvalidParamError('email', 'Email already used'));
+        expect(createUserSpy.statusCode).toBe(400);
+    });
+
 });
