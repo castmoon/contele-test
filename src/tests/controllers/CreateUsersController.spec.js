@@ -27,5 +27,12 @@ describe('CreateUsersController', () => {
         expect(createUserSpy.body).toEqual(new InvalidParamError('email'));
         expect(createUserSpy.statusCode).toBe(400);
     });
-    
+
+    test('should throws if an invalid password is provided', () => {
+        const createUserController = makeCreateUserController();
+        const createUserSpy = createUserController.handle('test@test.com', 'test_password');
+        expect(createUserSpy.body).toEqual(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'));
+        expect(createUserSpy.statusCode).toBe(400);
+    });
+
 });
