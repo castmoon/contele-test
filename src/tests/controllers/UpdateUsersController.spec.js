@@ -18,19 +18,13 @@ describe('UpdateUsersController', () => {
         expect(updateUserSpy.statusCode).toBe(400);
     });
 
-    test('should throws if no email is provided', () => {
+    test('should throws if no email & no password is provided', () => {
         const updateUserController = makeUpdateUserController();
-        const updateUserSpy = updateUserController.handle('test_id', '','test_password');
-        expect(updateUserSpy.body).toEqual(new MissingParamError('email'));
+        const updateUserSpy = updateUserController.handle('test_id', '','');
+        expect(updateUserSpy.body).toEqual(new MissingParamError('email & password'));
         expect(updateUserSpy.statusCode).toBe(400);
     });
 
-    test('should throws if no password is provided', () => {
-        const updateUserController = makeUpdateUserController();
-        const updateUserSpy = updateUserController.handle('test_id', 'test@email.com','');
-        expect(updateUserSpy.body).toEqual(new MissingParamError('password'));
-        expect(updateUserSpy.statusCode).toBe(400);
-    });
 
     test('should throws if an invalid email is provided', () => {
         const updateUserController = makeUpdateUserController();

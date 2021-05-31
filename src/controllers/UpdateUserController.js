@@ -15,12 +15,8 @@ class UpdateUserController {
         if(!id) {
             return badRequest(new MissingParamError('id'));
           }
-        if(!email) {
-          return badRequest(new MissingParamError('email'));
-        }
-      
-        if(!password) {
-          return badRequest(new MissingParamError('password'));
+        if(!email && !password) {
+          return badRequest(new MissingParamError('email & password'));
         }
 
         const validateEmail = emailValidator(email);
