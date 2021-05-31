@@ -1,4 +1,4 @@
-const { badRequest } = require('../protocols/http/http-helper');
+const { badRequest, serverError } = require('../protocols/http/http-helper');
 const { MissingParamError, InvalidParamError } = require('../protocols/errors');
 const { emailValidator, passwordValidator, idGenerator } = require('../factories')
 const User = require('../models/User');
@@ -42,10 +42,8 @@ class CreateUserController {
         writeData(this.database);
         return {
           statusCode: 200,
-          body: {
-            message: "user successfully created"
-          }
-        };
+          body: 'User successfully created'
+        }
       }
 
 }

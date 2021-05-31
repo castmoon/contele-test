@@ -1,5 +1,5 @@
 const { CreateUserController } = require('../../controllers');
-const { NotFoundError, MissingParamError, InvalidParamError } = require('../../protocols/errors');
+const { MissingParamError, InvalidParamError } = require('../../protocols/errors');
 
 
 describe('CreateUsersController', () => {
@@ -45,4 +45,5 @@ describe('CreateUsersController', () => {
         expect(createUserSpy.body).toEqual(new InvalidParamError('email', 'Email already used'));
         expect(createUserSpy.statusCode).toBe(400);
     });
+
 });

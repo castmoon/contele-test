@@ -25,8 +25,9 @@ routes.post('/', async(req, res) => {
 
 routes.put('/:id', (req, res) => {
   const id = req.params.id;
+  const { email, password } = req.body;
   const updateUserController = new UpdateUserController(readDatabase());
-  const updatedUser = updateUserController.handle(id, { password } = req.body);
+  const updatedUser = updateUserController.handle(id, email, password);
   return res.status(updatedUser.statusCode).json(updatedUser.body);
 });
 

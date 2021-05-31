@@ -1,6 +1,7 @@
 const { badRequest } = require('../protocols/http/http-helper');
 const { MissingParamError, NotFoundError, InvalidParamError } = require('../protocols/errors');
 const { passwordValidator } = require('../factories');
+const writeData = require('../database/databaseWritter');
 
 const User = require('../models/User');
 const fs = require('fs');
@@ -10,7 +11,7 @@ class UpdateUserController {
         this.database = database;
     }
 
-     handle(id, { password }) {
+     handle(id, email, password) {
         if(!id) {
             return badRequest(new MissingParamError('id'));
           }
@@ -30,7 +31,7 @@ class UpdateUserController {
       
       
           this.database[indexOfUser].password = password;
-          fs.writeFileSync(`${__dirname}/../database/database.json`, JSON.stringify(this.database), 'utf-8');
+          writeData(this.database);
       
           return {
             statusCode: 200,
