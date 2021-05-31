@@ -18,5 +18,11 @@ describe('UpdateUsersController', () => {
         expect(updateUserSpy.statusCode).toBe(400);
     });
 
+    test('should throws if no id is provided', () => {
+        const updateUserController = makeUpdateUserController();
+        const updateUserSpy = updateUserController.handle('test_id', '','test_password');
+        expect(updateUserSpy.body).toEqual(new MissingParamError('email'));
+        expect(updateUserSpy.statusCode).toBe(400);
+    });
 
 });
