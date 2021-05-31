@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const fs = require('fs');
 const { InvalidParamError, NotFoundError, MissingParamError } = require('../protocols/errors');
-const badRequest = require('../protocols/http/http-helper');
+const { badRequest, serverError } = require('../protocols/http/http-helper');
 const generateNewId = require('../factories/id-generator');
 const emailValidator = require('../factories/email-validator');
 const passwordValidator = require('../factories/password-validator');
@@ -10,27 +10,6 @@ const passwordValidator = require('../factories/password-validator');
 class UserController {
   constructor(database) {
     this.database = database;
-  }
-
-  listAllUsers() {
-    if(this.database.length === 0) {
-      return badRequest(new NotFoundError('users'));
-    }
-    return {
-      statusCode: 200,
-      body: this.database
-    };
-  }
-
-    listUserById(id) {
-    const filteredUser = this.database.find(user => user.id === id);
-    if(!filteredUser) {
-      return badRequest(new NotFoundError('user'));
-    }
-    return {
-      statusCode: 200,
-      body: filteredUser
-    };
   }
 
   createUser({ email, password }) {
