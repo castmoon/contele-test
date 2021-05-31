@@ -3,7 +3,8 @@ const { Router } = require('express');
 const routes = Router();
 const fs = require('fs');
 const UsersController = require('../controllers/userController');
-const { ListUsersController } = require('../controllers');
+const { ListUsersController, CreateUserController } = require('../controllers');
+
 
 
 const readDatabase = () => JSON.parse(fs.readFileSync(`${__dirname}/../database.json`), 'utf-8');
@@ -25,7 +26,8 @@ routes.get('/:id', (req, res) => {
 });
 
 routes.post('', (req, res) => {
-  const createdUser = usersController.createUser({email, password} = req.body);
+  const createUserController = new CreateUserController(readDatabase());
+  const createdUser = createUserController.handle({email, password} = req.body);
   return res.status(createdUser.statusCode).json(createdUser.body);
 });
 
