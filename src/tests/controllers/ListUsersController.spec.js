@@ -38,4 +38,19 @@ describe('ListUsersController', () => {
         expect(listUserByIdSpy.statusCode).toBe(400);
     });
 
+    test('should return an user if found', () => {
+        const listUsersController = makeListUserController();
+        listUsersController.database.push({
+            "id": "test2_id",
+            "email": "test2@test.com",
+            "password": "test_password"
+        })
+        const listUserByIdSpy = listUsersController.listUserById('test2_id');
+        expect(listUserByIdSpy.body).toEqual({
+            "id": "test2_id",
+            "email": "test2@test.com",
+            "password": "test_password"
+        });
+        expect(listUserByIdSpy.statusCode).toBe(200);
+    });
 });
