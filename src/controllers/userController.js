@@ -3,6 +3,8 @@ const fs = require('fs');
 const { InvalidParamError, NotFoundError, MissingParamError } = require('../protocols/errors');
 const badRequest = require('../protocols/http/http-helper');
 const generateNewId = require('../factories/id-generator');
+const emailValidator = require('../factories/email-validator');
+const passwordValidator = require('../factories/password-validator');
 
 
 class UserController {
@@ -38,6 +40,17 @@ class UserController {
     if(!password) {
       return badRequest(new MissingParamError('password'));
     }
+
+    const validateEmail = emailValidator(email);
+    if(!validateEmail) {
+      return badRequest(new InvalidParamError('email'));
+    }
+
+    const validatePassword = passwordValidator(password);
+    if(!validatePassword) {
+      return badRequest(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'))
+    }
+
     const generatedId = generateNewId()
 
     let user = new User(generatedId, email, password);
@@ -55,11 +68,17 @@ class UserController {
     if(!id) {
       return badRequest(new MissingParamError('id'));
     }
+
+    if(!password) {
+      return badRequest(new MissingParamError('password'));
+    }
     const indexOfUser = this.database.findIndex(user => user.id === id);
 
     if(!indexOfUser) {
       return badRequest(new NotFoundError('user'));
     }
+
+
     this.database[indexOfUser].password = password;
     fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
 
