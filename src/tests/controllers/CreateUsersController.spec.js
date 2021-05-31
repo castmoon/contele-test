@@ -45,5 +45,4 @@ describe('CreateUsersController', () => {
         expect(createUserSpy.body).toEqual(new InvalidParamError('email', 'Email already used'));
         expect(createUserSpy.statusCode).toBe(400);
     });
-
 });

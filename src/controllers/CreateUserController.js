@@ -3,6 +3,7 @@ const { MissingParamError, InvalidParamError } = require('../protocols/errors');
 const { emailValidator, passwordValidator, idGenerator } = require('../factories')
 const User = require('../models/User');
 const fs = require('fs');
+const writeData = require('../database/databaseWritter');
 
 class CreateUserController {
     constructor(database) {
@@ -38,9 +39,7 @@ class CreateUserController {
     
         let user = new User(generatedId, email, password);
         this.database.push(user);
-        console.log(this.database);
-        fs.writeFileSync(`${__dirname}/../database/database.json`, JSON.stringify(this.database), 'utf-8');
-
+        writeData(this.database);
         return {
           statusCode: 200,
           body: {
