@@ -2,6 +2,8 @@ const User = require("../models/User");
 const fs = require('fs');
 const { InvalidParamError, NotFoundError, MissingParamError } = require('../protocols/errors');
 const badRequest = require('../protocols/http/http-helper');
+const generateNewId = require('../factories/id-generator');
+
 
 class UserController {
   constructor(database) {
@@ -36,7 +38,8 @@ class UserController {
     if(!password) {
       return badRequest(new MissingParamError('password'));
     }
-    const generatedId = Math.random().toString(32).substr(2,9)
+    const generatedId = generateNewId()
+
     let user = new User(generatedId, email, password);
     this.database.push(user);
     fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
@@ -49,20 +52,53 @@ class UserController {
   }
 
   updateUser(id, {password}) {
+    if(!id) {
+      return badRequest(new MissingParamError('id'));
+    }
     const indexOfUser = this.database.findIndex(user => user.id === id);
+
+    if(!indexOfUser) {
+      return badRequest(new NotFoundError('user'));
+    }
     this.database[indexOfUser].password = password;
     fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
+
+    return {
+      statusCode: 200,
+      body: {
+        message: 'user successfully updated'
+      }
+    }
   }
 
   deleteUser(id) {
+    if(!id) {
+      return badRequest(new MissingParamError('id'));
+    }
     const indexOfUser = this.database.findIndex(user => user.id === id);
+    if(!indexOfUser) {
+      return badRequest(new NotFoundError('user'));
+    }
     this.database.splice(indexOfUser, 1);
     fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
+    return {
+      statusCode: 200,
+      body: {
+        message: 'user successfully deleted'
+      }
+    }
   }
 
   deleteAllUsers() {
     this.database = [];
     fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
+
+    return {
+      statusCode: 200,
+      body: {
+        message: 'users successfully deleted'
+      }
+    }
   }
 }
 

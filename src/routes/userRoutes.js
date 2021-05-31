@@ -28,18 +28,18 @@ routes.post('', (req, res) => {
 routes.put('/:id', (req, res) => {
   const id = req.params.id;
   const updatedUser = usersController.updateUser(id, { password } = req.body);
-  return res.status(200).json(updatedUser);
+  return res.status(updatedUser.statusCode).json(updatedUser.body);
 });
 
 routes.delete('/:id', (req, res) => {
   const id = req.params.id;
-  usersController.deleteUser(id);
-  res.status(200).json({message: "success"});
+  const responseOfDeletedUser =  usersController.deleteUser(id);
+  res.status(responseOfDeletedUser.statusCode).json(responseOfDeletedUser.body);
 });
 
 routes.delete('/', (req, res) => {
-  usersController.deleteAllUsers();
-  res.status(200).json({message: "all users deleted"});
+  const responseOfDeletedUsers = usersController.deleteAllUsers();
+  res.status(responseOfDeletedUsers.statusCode).json(responseOfDeletedUsers.body);
 });
 
 
