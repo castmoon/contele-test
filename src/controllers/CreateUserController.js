@@ -9,7 +9,7 @@ class CreateUserController {
         this.database = database;
     }
 
-    async handle( email, password ) {
+     handle( email, password ) {
         if(!email) {
           return badRequest(new MissingParamError('email'));
         }
@@ -27,7 +27,7 @@ class CreateUserController {
           return badRequest(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'));
         }
 
-        const searchEmailInDB = await this.database.find(user => user.email === email);
+        const searchEmailInDB = this.database.find(user => user.email === email);
 
         console.log(searchEmailInDB);
 
