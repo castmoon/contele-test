@@ -1,13 +1,7 @@
-const { create } = require('domain');
 const { Router } = require('express');
 const routes = Router();
-const fs = require('fs');
 const { ListUsersController, CreateUserController, UpdateUserController, DeleteUserController } = require('../controllers');
-
-
-
-const readDatabase = () => JSON.parse(fs.readFileSync(`${__dirname}/../database.json`), 'utf-8');
-
+const readDatabase = require('../database/databaseLoader');
 
 routes.get('/', (req, res) => {
   const listUsersController = new ListUsersController(readDatabase());
