@@ -19,7 +19,7 @@ class DeleteUserController {
           return badRequest(new NotFoundError('user'));
         }
         this.database.splice(indexOfUser, 1);
-        fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
+        fs.writeFileSync(`${__dirname}/../database/database.json`, JSON.stringify(this.database), 'utf-8')
         return {
           statusCode: 200,
           body: {
@@ -30,7 +30,7 @@ class DeleteUserController {
     
       deleteAll() {
         this.database = [];
-        fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
+        fs.writeFileSync(`${__dirname}/../database/database.json`, JSON.stringify(this.database), 'utf-8');
     
         return {
           statusCode: 200,

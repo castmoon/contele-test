@@ -30,7 +30,7 @@ class UpdateUserController {
       
       
           this.database[indexOfUser].password = password;
-          fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
+          fs.writeFileSync(`${__dirname}/../database/database.json`, JSON.stringify(this.database), 'utf-8');
       
           return {
             statusCode: 200,
