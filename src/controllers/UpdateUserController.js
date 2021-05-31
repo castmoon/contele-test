@@ -10,7 +10,7 @@ class UpdateUserController {
         this.database = database;
     }
 
-    async handle(id, { password }) {
+     handle(id, { password }) {
         if(!id) {
             return badRequest(new MissingParamError('id'));
           }
@@ -23,8 +23,8 @@ class UpdateUserController {
             return badRequest(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'));
           }
 
-          const indexOfUser = await this.database.findIndex(user => user.id === id);
-          if(!indexOfUser) {
+          const indexOfUser = this.database.findIndex(user => user.id === id);
+          if(indexOfUser === -1) {
             return badRequest(new NotFoundError('user'));
           }
       
