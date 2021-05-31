@@ -3,7 +3,7 @@ const { Router } = require('express');
 const routes = Router();
 const fs = require('fs');
 const UsersController = require('../controllers/userController');
-const { ListUsersController, CreateUserController } = require('../controllers');
+const { ListUsersController, CreateUserController, UpdateUserController } = require('../controllers');
 
 
 
@@ -31,9 +31,10 @@ routes.post('', (req, res) => {
   return res.status(createdUser.statusCode).json(createdUser.body);
 });
 
-routes.put('/:id', (req, res) => {
+routes.put('/:id', async(req, res) => {
   const id = req.params.id;
-  const updatedUser = usersController.updateUser(id, { password } = req.body);
+  const updateUserController = new UpdateUserController(readDatabase());
+  const updatedUser = await updateUserController.handle(id, { password } = req.body);
   return res.status(updatedUser.statusCode).json(updatedUser.body);
 });
 

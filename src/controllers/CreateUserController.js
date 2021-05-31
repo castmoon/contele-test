@@ -24,7 +24,7 @@ class CreateUserController {
     
         const validatePassword = passwordValidator(password);
         if(!validatePassword) {
-          return badRequest(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'))
+          return badRequest(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'));
         }
     
         const generatedId = idGenerator()

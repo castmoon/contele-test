@@ -12,31 +12,6 @@ class UserController {
     this.database = database;
   }
 
-  updateUser(id, {password}) {
-    if(!id) {
-      return badRequest(new MissingParamError('id'));
-    }
-
-    if(!password) {
-      return badRequest(new MissingParamError('password'));
-    }
-    const indexOfUser = this.database.findIndex(user => user.id === id);
-
-    if(!indexOfUser) {
-      return badRequest(new NotFoundError('user'));
-    }
-
-
-    this.database[indexOfUser].password = password;
-    fs.writeFileSync(`${__dirname}/../database.json`, JSON.stringify(this.database), 'utf-8');
-
-    return {
-      statusCode: 200,
-      body: {
-        message: 'user successfully updated'
-      }
-    }
-  }
 
   deleteUser(id) {
     if(!id) {
