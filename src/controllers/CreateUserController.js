@@ -9,7 +9,7 @@ class CreateUserController {
         this.database = database;
     }
 
-    handle({ email, password }) {
+    async handle({ email, password }) {
         if(!email) {
           return badRequest(new MissingParamError('email'));
         }
@@ -25,6 +25,11 @@ class CreateUserController {
         const validatePassword = passwordValidator(password);
         if(!validatePassword) {
           return badRequest(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'));
+        }
+
+        const searchEmailInDB = await this.database.find(user => user.email === email);
+        if(searchEmailInDB) {
+          return badRequest(new InvalidParamError('email', 'Email already used'))
         }
     
         const generatedId = idGenerator()

@@ -16,9 +16,9 @@ routes.get('/:id', (req, res) => {
   return res.status(user.statusCode).json(user.body);
 });
 
-routes.post('', (req, res) => {
+routes.post('', async(req, res) => {
   const createUserController = new CreateUserController(readDatabase());
-  const createdUser = createUserController.handle({email, password} = req.body);
+  const createdUser = await createUserController.handle({email, password} = req.body);
   return res.status(createdUser.statusCode).json(createdUser.body);
 });
 
