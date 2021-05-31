@@ -1,6 +1,5 @@
 const { ListUsersController } = require('../../controllers');
 const { NotFoundError } = require('../../protocols/errors');
-const readTestDatabase = require('../database/testDatabaseLoader')
 
 
 describe('ListUsersController', () => {
@@ -31,4 +30,12 @@ describe('ListUsersController', () => {
         }]);
         expect(listAllUsers.statusCode).toBe(200);
     });
+
+    test('should throws if invalid id is provided', () => {
+        const listUsersController = makeListUserController();
+        const listUserByIdSpy = listUsersController.listUserById('invalid_id');
+        expect(listUserByIdSpy.body).toEqual(new NotFoundError('user')); 
+        expect(listUserByIdSpy.statusCode).toBe(400);
+    });
+
 });
