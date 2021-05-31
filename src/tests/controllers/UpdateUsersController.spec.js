@@ -39,4 +39,11 @@ describe('UpdateUsersController', () => {
         expect(updateUserSpy.statusCode).toBe(400);
     });
 
+    test('should throws if an invalid password is provided', () => {
+        const updateUserController = makeUpdateUserController();
+        const updateUserSpy = updateUserController.handle('test_id', 'test@test.com','invalid_password');
+        expect(updateUserSpy.body).toEqual(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'));
+        expect(updateUserSpy.statusCode).toBe(400);
+    });
+
 });
