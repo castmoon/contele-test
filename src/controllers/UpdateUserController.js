@@ -1,6 +1,6 @@
 const { badRequest } = require('../protocols/http/http-helper');
 const { MissingParamError, NotFoundError, InvalidParamError } = require('../protocols/errors');
-const { passwordValidator } = require('../factories');
+const { passwordValidator, emailValidator } = require('../factories');
 const writeData = require('../database/databaseWritter');
 
 const User = require('../models/User');
@@ -22,6 +22,13 @@ class UpdateUserController {
         if(!password) {
           return badRequest(new MissingParamError('password'));
         }
+
+        const validateEmail = emailValidator(email);
+
+        if(!validateEmail) {
+          return badRequest(new InvalidParamError('email'));
+        }
+
         const validatePassword = passwordValidator(password);
         if(!validatePassword) {
           return badRequest(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'));
