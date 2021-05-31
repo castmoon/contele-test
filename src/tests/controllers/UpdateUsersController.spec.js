@@ -46,4 +46,11 @@ describe('UpdateUsersController', () => {
         expect(updateUserSpy.statusCode).toBe(400);
     });
 
+    test('should throws if an invalid id is provided', () => {
+        const updateUserController = makeUpdateUserController();
+        const updateUserSpy = updateUserController.handle('invalid_id', 'test@test.com','testPassword123@');
+        expect(updateUserSpy.body).toEqual(new NotFoundError('user'));
+        expect(updateUserSpy.statusCode).toBe(400);
+    });
+
 });
