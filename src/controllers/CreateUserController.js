@@ -9,7 +9,7 @@ class CreateUserController {
         this.database = database;
     }
 
-    async handle({ email, password }) {
+    async handle( email, password ) {
         if(!email) {
           return badRequest(new MissingParamError('email'));
         }
