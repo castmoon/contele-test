@@ -1,0 +1,22 @@
+[
+    {
+        "id":"test_id",
+        "email":"test@test.com",
+        "password": "test_password"
+    },
+    {
+        "id":"testId",
+        "email":"valid@test.com",
+        "password": "test_password"
+    },
+    {
+        "id":"dsaf321",
+        "email":"fsak@test.com",
+        "password": "test_password"
+    },
+    {
+        "id":"test_id",
+        "email":"test@test.com",
+        "password": "test_password"
+    },
+]

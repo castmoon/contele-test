@@ -1,5 +1,5 @@
-const { ListUsersController } = require('../../controllers');
-const { NotFoundError } = require('../../protocols/errors');
+const { ListUsersController } = require('../../src/controllers');
+const { NotFoundError } = require('../../src/protocols/errors');
 
 
 describe('ListUsersController', () => {

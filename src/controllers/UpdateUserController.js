@@ -1,36 +1,42 @@
-const { badRequest } = require('../protocols/http/http-helper');
+const { badRequest, notFound } = require('../protocols/http/httpHelper');
 const { MissingParamError, NotFoundError, InvalidParamError } = require('../protocols/errors');
-const { passwordValidator, emailValidator } = require('../factories');
-const writeData = require('../database/databaseWritter');
+const { passwordValidator, emailValidator } = require('../utils');
 
 const User = require('../models/User');
 const fs = require('fs');
-const { UV_FS_O_FILEMAP } = require('constants');
 
 class UpdateUserController {
-    constructor(database) {
-        this.database = database;
+    constructor(databaseManager) {
+        this.databaseManager = databaseManager;
     }
 
-     handle(id, password) {
+     update(id, email, password) {
         if(!id) {
             return badRequest(new MissingParamError('id'));
           }
-        if(!password) {
-          return badRequest(new MissingParamError('password'));
-        }
-        const indexOfUser = this.database.findIndex(user => user.id === id);
-        if(indexOfUser === -1) {
-          return badRequest(new NotFoundError('user'));
-        }
 
+        if(!email && !password) {
+          return badRequest(new MissingParamError('email & password'));
+        }
+        
+
+        if(password) {
           const validatePassword = passwordValidator(password);
           if(!validatePassword) {
             return badRequest(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'));
           }
+        }
 
-        this.database[indexOfUser].password = password;
-        writeData(this.database);
+        const indexOfUser = this.databaseManager.getAllUsers().findIndex(user => user.id === id);
+        if(indexOfUser === -1) {
+          return notFound(new NotFoundError('user'));
+        }
+
+        const user = this.databaseManager.getUserById(id);
+
+        const newUser = new User(id, email || user.email, password || user.password);
+
+        this.databaseManager.updateUser(newUser);
     
         return {
           statusCode: 200,

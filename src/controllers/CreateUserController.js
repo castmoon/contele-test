@@ -1,16 +1,15 @@
-const { badRequest, serverError } = require('../protocols/http/http-helper');
+const { badRequest } = require('../protocols/http/httpHelper');
 const { MissingParamError, InvalidParamError } = require('../protocols/errors');
-const { emailValidator, passwordValidator, idGenerator } = require('../factories')
+const { emailValidator, passwordValidator, generateId } = require('../utils')
 const User = require('../models/User');
 const fs = require('fs');
-const writeData = require('../database/databaseWritter');
 
 class CreateUserController {
-    constructor(database) {
-        this.database = database;
+    constructor(databaseManager) {
+        this.databaseManager = databaseManager;
     }
 
-     handle( email, password ) {
+     createUser( email, password ) {
         if(!email) {
           return badRequest(new MissingParamError('email'));
         }
@@ -28,18 +27,16 @@ class CreateUserController {
           return badRequest(new InvalidParamError('password', 'Your password must have at least 8 characters, a capital letter, a lower letter, a number and a special character.'));
         }
 
-        const searchEmailInDB = this.database.find(user => user.email === email);
-
+        const searchEmailInDB = this.databaseManager.getAllUsers().find(u => u.email === email);
 
         if(searchEmailInDB) {
           return badRequest(new InvalidParamError('email', 'Email already used'))
         }
     
-        const generatedId = idGenerator()
+        const generatedId = generateId();
     
         let user = new User(generatedId, email, password);
-        this.database.push(user);
-        writeData(this.database);
+        this.databaseManager.addUser(user);
         return {
           statusCode: 200,
           body: 'User successfully created'

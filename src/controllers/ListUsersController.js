@@ -1,29 +1,26 @@
-const { badRequest } = require('../protocols/http/http-helper');
+const { badRequest, notFound } = require('../protocols/http/httpHelper');
 const { NotFoundError } = require('../protocols/errors');
 
 class ListUsersController {
-    constructor(database) {
-        this.database = database;
+    constructor(databaseManager) {
+        this.databaseManager = databaseManager;
     }
 
     listAllUsers() {
-        if(this.database.length === 0) {
-          return badRequest(new NotFoundError('users'));
-        }
         return {
           statusCode: 200,
-          body: this.database
+          body: this.databaseManager.getAllUsers(),
         };
       }
 
-      listUserById(id) {
-        const filteredUser = this.database.find(user => user.id === id);
-        if(!filteredUser) {
-          return badRequest(new NotFoundError('user'));
+    listUserById(id) {
+        const user = this.databaseManager.getUserById(id);
+        if(!user) {
+          return notFound(new NotFoundError('user'));
         }
         return {
           statusCode: 200,
-          body: filteredUser
+          body: user
         };
       }
 }
