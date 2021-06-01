@@ -7,8 +7,13 @@ describe('UpdateUsersController', () => {
     const makeUpdateUserController = () => {
         return new UpdateUserController([{
             "id": "test_id",
-            "email": "test@email.com",
+            "email": "valid@email.com",
             "password": "test_password"
+        },
+        {
+            "id": "test_id2",
+            "email": "valid2@email.com",
+            "password": "test2_password"
         }]);
     }
     test('should throws if no id is provided', () => {
@@ -44,6 +49,13 @@ describe('UpdateUsersController', () => {
         const updateUserController = makeUpdateUserController();
         const updateUserSpy = updateUserController.handle('invalid_id', 'test@test.com','testPassword123@');
         expect(updateUserSpy.body).toEqual(new NotFoundError('user'));
+        expect(updateUserSpy.statusCode).toBe(400);
+    });
+
+    test('should throws if an registered email is provided', () => {
+        const updateUserController = makeUpdateUserController();
+        const updateUserSpy = updateUserController.handle('test_id', 'valid@email.com', 'testPassword123@');
+        expect(updateUserSpy.body).toEqual(new InvalidParamError('email'));
         expect(updateUserSpy.statusCode).toBe(400);
     });
 

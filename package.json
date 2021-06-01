@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon src/app.js",
-    "test": "jest --watch"
+    "test": "jest --watch --passWithNoTests"
   },
   "dependencies": {
     "email-validator": "^2.0.4",
