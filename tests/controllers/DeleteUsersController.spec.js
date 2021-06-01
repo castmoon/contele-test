@@ -1,4 +1,3 @@
-const { ListUsersController } = require('../../src/controllers');
 const DeleteUserController = require('../../src/controllers/DeleteUserController');
 const JsonDatabaseManager = require('../../src/database/JsonDatabaseManager');
 const { NotFoundError } = require('../../src/protocols/errors');
@@ -29,7 +28,7 @@ describe('DeleteUsersController', () => {
 
     test('should delete all successfuly', () => {
         deleteUserController.deleteAll();
-        const verifyUsers = deleteUserController.databaseManager.getAllUsers;
-        expect(verifyUsers).toBeFalsy();
+        const verifyUsers = deleteUserController.databaseManager.getAllUsers();
+        expect(verifyUsers).toEqual([]);
     })
 });
