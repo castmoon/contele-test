@@ -39,7 +39,9 @@ class CreateUserController {
         this.databaseManager.addUser(user);
         return {
           statusCode: 200,
-          body: 'User successfully created'
+          body: {
+            message: 'User successfully created'
+          }
         }
       }
 
