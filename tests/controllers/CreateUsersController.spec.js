@@ -10,6 +10,11 @@ describe('CreateUsersController', () => {
     afterAll(() => {
         jsonDatabaseManager.deleteAll();
     })
+
+    beforeEach(() => {
+        jsonDatabaseManager.deleteAll();
+    })
+    
     
     test('should throws if no email is provided', () => {
         const createUserSpy = createUserController.createUser('', 'test_password');
@@ -48,5 +53,12 @@ describe('CreateUsersController', () => {
         createUserController.createUser('test@test.com', 'testPassword1@');
         const verifyUser = createUserController.databaseManager.getAllUsers().find(user => user.email == 'test@test.com');
         expect(verifyUser).toBeTruthy();
+    });
+
+    test('should return 200 and success if successfully created user', () => {
+        const createUserController = new CreateUserController(jsonDatabaseManager);
+        const createUserSpy = createUserController.createUser('test@test.com', 'testPassword1@');
+        expect(createUserSpy.body).toBe('User successfully created');
+        expect(createUserSpy.statusCode).toBe(200);
     });
 });

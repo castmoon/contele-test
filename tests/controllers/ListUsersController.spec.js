@@ -1,56 +1,49 @@
 const { ListUsersController } = require('../../src/controllers');
+const JsonDatabaseManager = require('../../src/database/JsonDatabaseManager');
 const { NotFoundError } = require('../../src/protocols/errors');
 
 
 describe('ListUsersController', () => {
 
-    const makeListUserController = () => {
-        return new ListUsersController([{
-            "id": "test_id",
-            "email": "test@test.com",
-            "password": "test"
-        }]);
-    }
+    const jsonDatabaseManager = new JsonDatabaseManager(`${__dirname}/../mocks/multipleUsers.json`);
+    const listUsersController = new ListUsersController(jsonDatabaseManager);
 
-    test('should throws if there no users in db', () => {
-        const listUsersController = makeListUserController();
-        listUsersController.database = [];
-        const listUsers = listUsersController.listAllUsers();
-        expect(listUsers.body).toEqual(new NotFoundError('users'));
-        expect(listUsers.statusCode).toBe(400);
+    test('should return an empty array if no users in db', () => {
+        const jsonDatabaseManager = new JsonDatabaseManager(`${__dirname}/../mocks/empyDatabase.json`);
+        const listUsersController = new ListUsersController(jsonDatabaseManager);
+        const listUsersSpy = listUsersController.listAllUsers();
+        expect(listUsersSpy.body).toEqual([]);
+        expect(listUsersSpy.statusCode).toBe(200);
     });
     
     test('should return users', () => {
-        const listUsersController = makeListUserController();
-        const listAllUsers = listUsersController.listAllUsers();
-        expect(listAllUsers.body).toEqual([{
+        const listUsersSpy = listUsersController.listAllUsers();
+        expect(listUsersSpy.body).toEqual([{
             "id": "test_id",
-            "email": "test@test.com",
-            "password": "test"
+            "email": "valid@email.com",
+            "password": "test_password"
+        },
+        {
+            "id": "test_id2",
+            "email": "valid2@email.com",
+            "password": "test2_password"
         }]);
-        expect(listAllUsers.statusCode).toBe(200);
+        expect(listUsersSpy.statusCode).toBe(200);
     });
 
     test('should throws if invalid id is provided', () => {
-        const listUsersController = makeListUserController();
-        const listUserByIdSpy = listUsersController.listUserById('invalid_id');
-        expect(listUserByIdSpy.body).toEqual(new NotFoundError('user')); 
-        expect(listUserByIdSpy.statusCode).toBe(400);
+        const listUserSpy = listUsersController.listUserById('invalid_id');
+        expect(listUserSpy.body).toEqual(new NotFoundError('user'));
+        expect(listUserSpy.statusCode).toBe(404);
     });
 
     test('should return an user if found', () => {
-        const listUsersController = makeListUserController();
-        listUsersController.database.push({
-            "id": "test2_id",
-            "email": "test2@test.com",
-            "password": "test_password"
-        })
-        const listUserByIdSpy = listUsersController.listUserById('test2_id');
-        expect(listUserByIdSpy.body).toEqual({
-            "id": "test2_id",
-            "email": "test2@test.com",
+        const listUserSpy = listUsersController.listUserById('test_id');
+        expect(listUserSpy.body).toEqual({
+            "id": "test_id",
+            "email": "valid@email.com",
             "password": "test_password"
         });
-        expect(listUserByIdSpy.statusCode).toBe(200);
+        expect(listUserSpy.statusCode).toBe(200);
     });
 });
