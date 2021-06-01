@@ -18,23 +18,15 @@ describe('UpdateUsersController', () => {
     }
     test('should throws if no id is provided', () => {
         const updateUserController = makeUpdateUserController();
-        const updateUserSpy = updateUserController.handle('',"test@email.com",'test_password');
+        const updateUserSpy = updateUserController.handle('','test_password');
         expect(updateUserSpy.body).toEqual(new MissingParamError('id'));
         expect(updateUserSpy.statusCode).toBe(400);
     });
 
-    test('should throws if no email & no password is provided', () => {
+    test('should throws if no password is provided', () => {
         const updateUserController = makeUpdateUserController();
-        const updateUserSpy = updateUserController.handle('test_id', '','');
-        expect(updateUserSpy.body).toEqual(new MissingParamError('email & password'));
-        expect(updateUserSpy.statusCode).toBe(400);
-    });
-
-
-    test('should throws if an invalid email is provided', () => {
-        const updateUserController = makeUpdateUserController();
-        const updateUserSpy = updateUserController.handle('test_id', 'invalid_email','test_password');
-        expect(updateUserSpy.body).toEqual(new InvalidParamError('email'));
+        const updateUserSpy = updateUserController.handle('test_id', '');
+        expect(updateUserSpy.body).toEqual(new MissingParamError('password'));
         expect(updateUserSpy.statusCode).toBe(400);
     });
 
@@ -52,11 +44,5 @@ describe('UpdateUsersController', () => {
         expect(updateUserSpy.statusCode).toBe(400);
     });
 
-    test('should throws if an registered email is provided', () => {
-        const updateUserController = makeUpdateUserController();
-        const updateUserSpy = updateUserController.handle('test_id', 'valid@email.com', 'testPassword123@');
-        expect(updateUserSpy.body).toEqual(new InvalidParamError('email'));
-        expect(updateUserSpy.statusCode).toBe(400);
-    });
 
 });
