@@ -43,6 +43,4 @@ describe('UpdateUsersController', () => {
         expect(updateUserSpy.body).toEqual(new NotFoundError('user'));
         expect(updateUserSpy.statusCode).toBe(400);
     });
-
-
 });

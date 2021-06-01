@@ -1,7 +1,7 @@
 const { badRequest } = require('../protocols/http/http-helper');
 const { MissingParamError, NotFoundError } = require('../protocols/errors');
+const writeData = require('../database/databaseWritter');
 
-const User = require('../models/User');
 const fs = require('fs');
 
 class DeleteUserController {
@@ -9,12 +9,8 @@ class DeleteUserController {
         this.database = database;
     }
 
-    async deleteOne(id) {
-        if(!id) {
-          return badRequest(new MissingParamError('id'));
-        }
-        const indexOfUser = await this.database.findIndex(user => user.id === id);
-        console.log(indexOfUser);
+     deleteOne(id) {
+        const indexOfUser = this.database.findIndex(user => user.id === id);
         if(indexOfUser === -1) {
           return badRequest(new NotFoundError('user'));
         }
@@ -30,8 +26,7 @@ class DeleteUserController {
     
       deleteAll() {
         this.database = [];
-        fs.writeFileSync(`${__dirname}/../database/database.json`, JSON.stringify(this.database), 'utf-8');
-    
+        writeData(this.database);
         return {
           statusCode: 200,
           body: {

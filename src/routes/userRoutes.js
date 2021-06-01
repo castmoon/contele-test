@@ -31,10 +31,10 @@ routes.put('/:id', (req, res) => {
   return res.status(updatedUser.statusCode).json(updatedUser.body);
 });
 
-routes.delete('/:id', async (req, res) => {
+routes.delete('/:id', (req, res) => {
   const id = req.params.id;
   const deleteUserController = new DeleteUserController(readDatabase());
-  const responseOfDeletedUser = await deleteUserController.deleteOne(id);
+  const responseOfDeletedUser =  deleteUserController.deleteOne(id);
   res.status(responseOfDeletedUser.statusCode).json(responseOfDeletedUser.body);
 });
 

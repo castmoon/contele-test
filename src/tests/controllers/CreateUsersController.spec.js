@@ -4,9 +4,7 @@ const { MissingParamError, InvalidParamError } = require('../../protocols/errors
 
 describe('CreateUsersController', () => {
 
-    const makeCreateUserController = () => {
-        return new CreateUserController([]);
-    }
+    const makeCreateUserController = () => new CreateUserController([]);
     test('should throws if no email is provided', () => {
         const createUserController = makeCreateUserController();
         const createUserSpy = createUserController.handle('', 'test_password');
