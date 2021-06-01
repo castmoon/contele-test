@@ -11,7 +11,7 @@
 </h2>
 
 
-<p>Após clonar o projeto use o comando no terminal:</p>
+<p>Após clonar o projeto, use o comando no terminal:</p>
 
 ```
 npm install
@@ -27,7 +27,7 @@ npm start
 
 <h1>Rotas</h1>
 
-Use o path: `localhost:3333/api/v1/users` como base
+Use o base path: `localhost:3333/api/v1/users`
 
 <h2>Resgatar todos os usuários</h2>
 
